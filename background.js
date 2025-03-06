@@ -57,9 +57,11 @@ chrome.runtime.onConnect.addListener(function (port) {
       info.selection = info.selection.substring(0, max_length);
     executeMailto(tab.id, info.mailto, info.title, tab.url, info.selection);
 
-    // Use clipboard API directly instead of execCommand
-    navigator.clipboard.writeText(info.itsm + ":" + info.op).catch(err => {
-      console.error('Failed to write to clipboard: ', err);
+    // Create a temporary content script to access the clipboard from the context of the web page
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: copyToClipboard,
+      args: [info.itsm + ":" + info.op]
     });
   });
 });
@@ -79,3 +81,15 @@ chrome.action.onClicked.addListener(function (tab) {
     });
   }
 });
+
+function copyToClipboard(text) {
+  // Create temporary element
+  const input = document.createElement('textarea');
+  input.style.position = 'fixed';
+  input.style.opacity = '0';
+  input.value = text;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('copy');
+  document.body.removeChild(input);
+}
