@@ -1,0 +1,26 @@
+{
+  "name": "JIRA Mail for BCVS",
+  "description": "This extension adds an email button to the toolbar which allows you to email the BCVS Proactive Support.",
+  "version": "0.0.3",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "mail_128x128.png"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "clipboardWrite",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://issue.swisscom.ch/*"
+  ],
+  "action": {
+    "default_title": "Jira Extension",
+    "default_icon": "email_16x16.png"
+  },
+  "manifest_version": 3
+}
